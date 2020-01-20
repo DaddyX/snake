@@ -4,8 +4,9 @@ namespace app\admin\controller;
 
 use app\api;
 use app\admin\model\Node as NodeModel;
+use app\common\controller\Backend;
 
-class Node extends Base {
+class Node extends Backend {
 
     public function index() {
         if (request() -> isAjax()) {

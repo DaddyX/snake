@@ -2,11 +2,13 @@
 
 namespace app\index\controller;
 
-use think\Controller;
+use app\common\controller\Frontend;
 
-class Index extends Controller {
+class Index extends Frontend {
 
     public function index() {
-        return $this -> fetch();
+        $this -> redirect('/admin');
+        //return $this -> fetch();
     }
+
 }

@@ -5,15 +5,16 @@ namespace app\admin\controller;
 use app\api;
 use app\admin\model\Node as NodeModel;
 use app\admin\model\Role as RoleModel;
+use app\common\controller\Backend;
 
-class Role extends Base {
+class Role extends Backend {
 
     public function index() {
         if (request() -> isAjax()) {
             $params = input("param.", "", "trim");
             $query = RoleModel::order('id desc');
             if (!empty($params['keyword'])) {
-                $query -> where('role_name', 'like', '%' . $params['keyword'] . '%');
+                $query -> where('name', 'like', '%' . $params['keyword'] . '%');
             }
             $paginate = $query -> paginate($params['limit'], false, ['page' => $params['page']]);
             // 拼装参数
@@ -72,7 +73,7 @@ class Role extends Base {
     }
 
     // 分配权限
-    public function giveAccess() {
+    public function give_access() {
         $param = input('param.');
         $node = new NodeModel();
         // 获取现在的权限
@@ -101,20 +102,20 @@ class Role extends Base {
             '编辑' => [
                 'auth' => 'role/edit',
                 'href' => url('role/edit', ['id' => $id]),
-                'btnStyle' => 'primary',
+                'style' => 'primary',
                 'icon' => 'fa fa-paste'
             ],
             '删除' => [
                 'auth' => 'role/del',
                 'href' => "javascript:del(" . $id . ")",
-                'btnStyle' => 'danger',
+                'style' => 'danger',
                 'icon' => 'fa fa-trash-o'
             ],
             '分配权限' => [
-                'auth' => 'role/giveaccess',
-                'href' => "javascript:giveQx(" . $id . ")",
-                'btnStyle' => 'info',
-                'icon' => 'fa fa-institution'
+                'auth' => 'role/give_access',
+                'href' => "javascript:give_access(" . $id . ")",
+                'style' => 'info',
+                'icon' => 'fa fa-check-square-o'
             ],
         ];
     }

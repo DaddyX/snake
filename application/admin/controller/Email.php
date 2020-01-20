@@ -4,8 +4,9 @@ namespace app\admin\controller;
 
 use app\api;
 use app\admin\model\Email as EmailModel;
+use app\common\controller\Backend;
 
-class Email extends Base {
+class Email extends Backend {
 
     public function index() {
         if (request() -> isAjax()) {
@@ -77,13 +78,13 @@ class Email extends Base {
             '编辑' => [
                 'auth' => 'email/edit',
                 'href' => url('email/edit', ['id' => $id]),
-                'btnStyle' => 'primary',
+                'style' => 'primary',
                 'icon' => 'fa fa-paste'
             ],
             '删除' => [
                 'auth' => 'email/del',
                 'href' => "javascript:del(" . $id . ")",
-                'btnStyle' => 'danger',
+                'style' => 'danger',
                 'icon' => 'fa fa-trash-o'
             ]
         ];

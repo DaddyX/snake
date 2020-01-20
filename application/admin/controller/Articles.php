@@ -4,8 +4,9 @@ namespace app\admin\controller;
 
 use app\api;
 use app\admin\model\Articles as ArticlesModel;
+use app\common\controller\Backend;
 
-class Articles extends Base {
+class Articles extends Backend {
 
     public function index() {
         if (request() -> isAjax()) {
@@ -77,7 +78,7 @@ class Articles extends Base {
         if (request() -> isAjax()) {
             $file = request() -> file('file');
             // 移动到框架应用根目录/public/uploads/ 目录下
-            $info = $file -> move(ROOT_PATH . 'public' . DS . 'upload');
+            $info = $file -> move(\think\facade\Env::get('root_path') . 'public/upload');
             if ($info) {
                 $src = '/upload' . '/' . date('Ymd') . '/' . $info -> getFilename();
                 return api ::success('ok', ['src' => $src]);
@@ -98,13 +99,13 @@ class Articles extends Base {
             '编辑' => [
                 'auth' => 'articles/edit',
                 'href' => url('articles/edit', ['id' => $id]),
-                'btnStyle' => 'primary',
+                'style' => 'primary',
                 'icon' => 'fa fa-paste'
             ],
             '删除' => [
                 'auth' => 'articles/del',
                 'href' => "javascript:del(" . $id . ")",
-                'btnStyle' => 'danger',
+                'style' => 'danger',
                 'icon' => 'fa fa-trash-o'
             ]
         ];

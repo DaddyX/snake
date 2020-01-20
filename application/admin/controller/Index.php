@@ -3,8 +3,9 @@
 namespace app\admin\controller;
 
 use app\admin\model\Node as NodeModel;
+use app\common\controller\Backend;
 
-class Index extends Base {
+class Index extends Backend {
 
     // 系统首页
     public function index() {
@@ -16,7 +17,7 @@ class Index extends Base {
     }
 
     // 控制台首页
-    public function indexPage() {
-        return $this -> fetch('index');
+    public function main() {
+        return $this -> fetch();
     }
 }

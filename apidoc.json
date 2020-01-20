@@ -1,0 +1,11 @@
+{
+  "name": "冲鸭！",
+  "version": "0.0.0",
+  "description": "全方位面向自动化生产的API接口文档",
+  "title": "API文档",
+  "url": "",
+  "template": {
+    "withCompare": false,
+    "withGenerator": false
+  }
+}

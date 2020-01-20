@@ -17,7 +17,7 @@
  */
 function check_env(){
     $items = array(
-        'php'     => array('PHP版本', '5.5', '5.5+', PHP_VERSION, 'check'),
+        'php'     => array('PHP版本', '5.6', '5.6+', PHP_VERSION, 'check'),
         'upload'  => array('附件上传', '不限制', '2M+', '未知', 'check'),
         'gd'      => array('GD库', '2.0', '2.0+', '未知', 'check'),
         'disk'    => array('磁盘空间', '100M', '不限制', '未知', 'check'),
@@ -46,7 +46,7 @@ function check_env(){
 
     // 磁盘空间检测
     if(function_exists('disk_free_space')) {
-        $disk_size = floor(disk_free_space(INSTALL_APP_PATH) / (1024*1024));
+        $disk_size = floor(disk_free_space(ROOT_PATH) / (1024*1024));
         $items['disk'][3] = $disk_size.'M';
         if ($disk_size < 100) {
             $items['disk'][4] = 'times text-warning';
@@ -69,7 +69,7 @@ function check_dirfile(){
     );
 
     foreach ($items as &$val) {
-        $item =	INSTALL_APP_PATH . $val[3];
+        $item =	ROOT_PATH . $val[3];
         if('dir' == $val[0]){
             if(!is_writable($item)) {
                 if(is_dir($item)) {
@@ -173,7 +173,7 @@ function create_tables($db, $prefix = ''){
     $sql = explode(";\n", $sql);
 
     // 替换表前缀
-    $sql = str_replace(" `snake_", " `{$prefix}", $sql);
+    $sql = str_replace(" `w_", " `{$prefix}", $sql);
 
     // 开始安装
     show_progress('0%');

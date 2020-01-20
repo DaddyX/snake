@@ -3,23 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watermelon</title>
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="__CSS__/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="__CSS__/animate.min.css" rel="stylesheet">
-    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
-    <link href="__CSS__/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__STATIC__/admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__STATIC__/admin/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/animate.min.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="__STATIC__/admin/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <!-- Panel Other -->
-    <div class="ibox float-e-margins">
+    <div class="ibox">
         <div class="ibox-title">
             <h5>题库列表</h5>
         </div>
         <div class="ibox-content">
-            <div class="form-group clearfix pull-right">
+            <div class="clearfix pull-right">
                 {if authCheck('app_truth/add') }
                 <a href="{:url('app_truth/add')}">
                     <button class="btn btn-outline btn-primary" type="button">添加</button>
@@ -42,11 +43,13 @@
                 <div class="example">
                     <table id="cusTable">
                         <thead>
-                        <th data-field="id">ID</th>
-                        <th data-field="type">类型</th>
-                        <th data-field="content">内容</th>
-                        <th data-field="nickname">昵称</th>
-                        <th data-field="operate">操作</th>
+                            <tr>
+                                <th data-field="id">ID</th>
+                                <th data-field="type">类型</th>
+                                <th data-field="content">内容</th>
+                                <th data-field="nickname">昵称</th>
+                                <th data-field="operate">操作</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -57,16 +60,16 @@
 </div>
 <!-- End Panel Other -->
 </div>
-<script src="__JS__/jquery.min.js?v=2.1.4"></script>
-<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
-<script src="__JS__/content.min.js?v=1.0.0"></script>
-<script src="__JS__/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="__JS__/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-<script src="__JS__/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="__JS__/plugins/suggest/bootstrap-suggest.min.js"></script>
-<script src="__JS__/plugins/layer/laydate/laydate.js"></script>
-<script src="__JS__/plugins/sweetalert/sweetalert.min.js"></script>
-<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__STATIC__/admin/js/jquery.min.js?v=2.1.4"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="__STATIC__/admin/js/content.min.js?v=1.0.0"></script>
+<script src="__STATIC__/admin/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/suggest/bootstrap-suggest.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/layer/laydate/laydate.js"></script>
+<script src="__STATIC__/admin/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/layer/layer.min.js"></script>
 <script type="text/javascript">
     function initTable() {
         //先销毁表格
@@ -115,7 +118,7 @@
 
     function del(id){
         layer.confirm('确认删除此记录?', {icon: 3, title:'提示'}, function(index){
-            $.getJSON("{:url('app_truth/del')}", {'id' : id}, function(res){
+            $.post("{:url('app_truth/del')}", {'id' : id}, function(res){
                 if(res.code == 200){
                     layer.alert(res.message, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
                         initTable();

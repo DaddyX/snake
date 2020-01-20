@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>后台登录</title>
-    <link href="__CSS__/bootstrap.min.css" rel="stylesheet">
-    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="__CSS__/animate.min.css" rel="stylesheet">
-    <link href="__CSS__/style.min.css" rel="stylesheet">
+    <title>Watermelon</title>
+    <link href="__STATIC__/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__STATIC__/admin/css/animate.min.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/style.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
@@ -19,15 +19,16 @@
     </script>
     <style>
         body {
-            background: url("__IMG__/bg-login.jpg") no-repeat;
-            height: auto;
+            background-image: url("/static/admin/images/bg-login.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
         }
         form {
             width: 360px;
-            margin: 10% auto 0;
             color: #333;
-            background: rgba(200, 200, 200, .7);
-            border: 1px solid rgba(255, 255, 255, .3);
+            background: rgba(250, 250, 250, .8);
+            border: 1px solid rgba(205, 205, 205, .3);
             -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, .03);
             -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, .03);
             box-shadow: 0 3px 0 rgba(12, 12, 12, .03);
@@ -35,71 +36,69 @@
             -webkit-border-radius: 3px;
             border-radius: 3px;
             padding: 30px;
+            margin: 0 auto;
         }
     </style>
 </head>
-
 <body>
-<form method="post" action="index.html">
-    <div class="form-group">
-        <label for="username">账号</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名">
-    </div>
-    <div class="form-group">
-        <label for="password">密码</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
-    </div>
-    <div class="form-group">
-        <label for="captcha">验证码</label>
-        <div class="row">
-            <div class="col-xs-12 col-sm-7">
-                <input type="text" class="form-control" id="captcha" name="captcha" placeholder="请输入验证码">
-            </div>
-            <div class="col-xs-12 col-sm-5">
-                <img class="captcha" src="{:url('captcha')}" style="height: 34px;cursor: pointer;"
-                     onclick="this.src='{:url(\'captcha\')}?tm='+Math.random();" alt="验证码">
+<div class="animated fadeInUp" style="padding-top: 20rem;">
+    <form>
+        <div class="form-group">
+            <label for="username">账号</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="请输入账号">
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
+        </div>
+        <div class="form-group">
+            <label for="captcha">验证码</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" class="form-control" id="captcha" name="captcha" placeholder="请输入验证码">
+                </div>
+                <div class="col-xs-12 col-sm-5">
+                    <img class="captcha" src="{:url('captcha')}" style="height: 34px;cursor: pointer;"
+                         onclick="this.src='{:url(\'captcha\')}?tm='+Math.random();" alt="验证码">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <p id="err_msg"></p>
-        <input class="btn btn-success btn-block" id="login_btn" value="登录" />
-    </div>
-</form>
-<script src="__JS__/jquery.min.js?v=2.1.4"></script>
-<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+        <p id="err_msg">请点击下方"登录"</p>
+        <a class="btn btn-success btn-block" id="btn_login">登录</a>
+    </form>
+</div>
+<script src="__STATIC__/admin/js/jquery.min.js?v=2.1.4"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js?v=3.3.6"></script>
 <script type="text/javascript">
     document.onkeydown = function (event) {
-        var e = event || window.event || arguments.callee.caller.arguments[0];
+        let e = event || window.event || arguments.callee.caller.arguments[0];
         if (e && e.keyCode == 13) { // enter 键
-            $('#login_btn').click();
+            $('#btn_login').click();
         }
     };
-    var lock = false;
+    let lock = false;
     $(function () {
-        $('#login_btn').click(function () {
+        $('#btn_login').click(function () {
             if (lock) {
                 return;
             }
             lock = true;
-            $('#err_msg').html('');
-            $('#login_btn').removeClass('btn-success').addClass('btn-danger').val('登录中');
-            var username = $('#username').val();
-            var password = $('#password').val();
-            var captcha = $('#captcha').val();
+            $('#btn_login').removeClass('btn-success').addClass('btn-danger').val('登录中');
+            let username = $('#username').val();
+            let password = $('#password').val();
+            let captcha = $('#captcha').val();
             $.post("{:url('login/doLogin')}", {
                 'username': username,
                 'password': password,
                 'captcha': captcha
             }, function (data) {
                 lock = false;
-                $('#login_btn').val('登录').removeClass('btn-danger').addClass('btn-success');
-                if (data.code != 200) {
-                    $('#err_msg').show().html("<span style='color:red'>" + data.message + "</span>");
-                    $('img.captcha').attr("src", "{:url('captcha')}?tm="+Math.random());
-                    return;
-                } else {
+                $('#btn_login').val('登录').removeClass('btn-danger').addClass('btn-success');
+                if (data.code == 200) {
                     window.location.href = data.data;
+                } else {
+                    $('#err_msg').html("<span style='color:red'>" + data.message + "</span>");
+                    $('img.captcha').attr("src", "{:url('captcha')}?tm="+Math.random());
                 }
             });
         });

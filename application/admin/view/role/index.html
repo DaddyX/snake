@@ -3,24 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>角色列表</title>
+    <title>Watermelon</title>
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="__CSS__/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="__CSS__/animate.min.css" rel="stylesheet">
-    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
-    <link href="__CSS__/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__STATIC__/admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__STATIC__/admin/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/animate.min.css" rel="stylesheet">
+    <link href="__STATIC__/admin/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="__STATIC__/admin/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <!-- Panel Other -->
-    <div class="ibox float-e-margins">
+    <div class="ibox">
         <div class="ibox-title">
             <h5>角色列表</h5>
         </div>
         <div class="ibox-content">
-            <div class="form-group clearfix pull-right">
+            <div class="clearfix pull-right">
                 {if authCheck('role/add') }
                 <a href="{:url('role/add')}">
                     <button class="btn btn-outline btn-primary" type="button">添加</button>
@@ -43,9 +43,11 @@
                 <div class="example">
                     <table id="cusTable">
                         <thead>
-                        <th data-field="id">ID</th>
-                        <th data-field="role_name">角色名称</th>
-                        <th data-field="operate">操作</th>
+                            <tr>
+                                <th data-field="id">ID</th>
+                                <th data-field="name">角色名称</th>
+                                <th data-field="operate">操作</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -73,20 +75,20 @@
 <script type="text/javascript">
     zNodes = '';
 </script>
-<script src="__JS__/jquery.min.js?v=2.1.4"></script>
-<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
-<script src="__JS__/content.min.js?v=1.0.0"></script>
-<script src="__JS__/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="__JS__/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-<script src="__JS__/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="__JS__/plugins/suggest/bootstrap-suggest.min.js"></script>
-<script src="__JS__/plugins/layer/laydate/laydate.js"></script>
-<script src="__JS__/plugins/sweetalert/sweetalert.min.js"></script>
-<script src="__JS__/plugins/layer/layer.min.js"></script>
-<link rel="stylesheet" href="__JS__/plugins/zTree/zTreeStyle.css" type="text/css">
-<script type="text/javascript" src="__JS__/plugins/zTree/jquery.ztree.core-3.5.js"></script>
-<script type="text/javascript" src="__JS__/plugins/zTree/jquery.ztree.excheck-3.5.js"></script>
-<script type="text/javascript" src="__JS__/plugins/zTree/jquery.ztree.exedit-3.5.js"></script>
+<script src="__STATIC__/admin/js/jquery.min.js?v=2.1.4"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="__STATIC__/admin/js/content.min.js?v=1.0.0"></script>
+<script src="__STATIC__/admin/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/suggest/bootstrap-suggest.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/layer/laydate/laydate.js"></script>
+<script src="__STATIC__/admin/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="__STATIC__/admin/js/plugins/layer/layer.min.js"></script>
+<link rel="stylesheet" href="__STATIC__/admin/js/plugins/zTree/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="__STATIC__/admin/js/plugins/zTree/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/plugins/zTree/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/plugins/zTree/jquery.ztree.exedit-3.5.js"></script>
 <script type="text/javascript">
     function initTable() {
         //先销毁表格
@@ -136,7 +138,7 @@
 
     function del(id){
         layer.confirm('确认删除此记录?', {icon: 3, title:'提示'}, function(index){
-            $.getJSON("{:url('role/del')}", {'id' : id}, function(res){
+            $.post("{:url('role/del')}", {'id' : id}, function(res){
                 if(res.code == 200){
                     layer.alert(res.message, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
                         initTable();
@@ -152,13 +154,13 @@
     var index = '';
     var index2 = '';
     //分配权限
-    function giveQx(id){
+    function give_access(id){
         $("#nodeid").val(id);
         //加载层
         index2 = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
 
         // 获取权限信息
-        $.getJSON("{:url('role/giveAccess')}", {'type' : 'get', 'id' : id}, function(res){
+        $.post("{:url('role/give_access')}", {'type' : 'get', 'id' : id}, function(res){
             layer.close(index2);
             if(res.code == 200){
                 zNodes = JSON.parse(res.data);  //将字符串转换成obj
@@ -188,7 +190,7 @@
                 var zTree = $.fn.zTree.getZTreeObj("treeType");
                 zTree.expandAll(true);
             }else{
-                layer.alert(res.msg, {title: '友情提示', icon: 2});
+                layer.alert(res.message, {title: '友情提示', icon: 2});
             }
 
         });
@@ -206,14 +208,14 @@
         });
         var id = $("#nodeid").val();
         //写入库
-        $.post("{:url('role/giveAccess')}", {'type' : 'give', 'id' : id, 'rule' : NodeString}, function(res){
+        $.post("{:url('role/give_access')}", {'type' : 'give', 'id' : id, 'rule' : NodeString}, function(res){
             layer.close(index);
             if(res.code == 200){
-                layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
+                layer.alert(res.message, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
                     initTable();
                 });
             }else{
-                layer.alert(res.msg, {title: '友情提示', icon: 2});
+                layer.alert(res.message, {title: '友情提示', icon: 2});
             }
 
         }, 'json')

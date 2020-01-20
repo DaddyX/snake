@@ -6,6 +6,7 @@ use think\Controller;
 use think\captcha\Captcha;
 use app\admin\model\Admin as AdminModel;
 use app\admin\model\Role as RoleModel;
+use app\common\controller\Backend;
 
 class Login extends Controller {
 
@@ -45,8 +46,8 @@ class Login extends Controller {
         $info = $roleModel -> getRoleInfo($hasUser['role_id']);
 
         session('username', $params['username']);
-        session('id', $hasUser['id']);
-        session('role', $info['role_name']);  // 角色名
+        session('aid', $hasUser['id']);
+        session('role', $info['name']);  // 角色名
         session('rule', $info['rule']);  // 角色节点
         session('action', $info['action']);  // 角色权限
 
@@ -66,7 +67,7 @@ class Login extends Controller {
     // 退出操作
     public function loginOut() {
         session('username', null);
-        session('id', null);
+        session('aid', null);
         session('role', null);  // 角色名
         session('rule', null);  // 角色节点
         session('action', null);  // 角色权限

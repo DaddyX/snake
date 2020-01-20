@@ -4,22 +4,12 @@ namespace app\install\controller;
 use think\Controller;
 use think\Db;
 
-define('INSTALL_APP_PATH', realpath('./') . '/../');
-
 /**
  * 安装控制器
  * @package app\install\controller
  */
 class Index extends Controller
 {
-    /**
-     * 获取入口目录
-     */
-    protected function _initialize() {
-        $base_file = $this->request->baseFile();
-        $base_dir  = rtrim($base_file, 'index.php');
-        $this->assign('static_dir', $base_dir . 'static/');
-    }
 
     /**
      * 安装首页

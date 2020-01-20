@@ -2,15 +2,16 @@
 
 namespace app\admin\controller;
 
-use app\common\model\TruthQuestion;
+use app\common\model\VidFilm;
 use app\api;
+use app\common\controller\Backend;
 
-class AppTruth extends Base {
+class AppTruth extends Backend {
 
     public function index() {
         if (request() -> isAjax()) {
             $params = input("param.", "", "trim");
-            $query = TruthQuestion ::order('id desc');
+            $query = VidFilm ::order('id desc');
             if (!empty($params['keyword'])) {
                 $query -> where('email', 'like', '%' . $params['keyword'] . '%');
             }
@@ -30,7 +31,7 @@ class AppTruth extends Base {
         if (request() -> isPost()) {
             $params = input('param.');
 
-            $model = new TruthQuestion();
+            $model = new VidFilm();
             $rs = $model -> strict(false) -> insert($params);
             if (!$rs) {
                 return api ::error('添加失败');
@@ -43,7 +44,7 @@ class AppTruth extends Base {
     // 编辑
     public function edit() {
         $params = input('param.');
-        $model = new TruthQuestion();
+        $model = new VidFilm();
         if (request() -> isPost()) {
             $rs = $model -> where('id', $params['id']) -> update($params);
             if (!$rs) {
@@ -60,7 +61,7 @@ class AppTruth extends Base {
     // 删除
     public function del() {
         $id = input('param.id');
-        $rs = TruthQuestion ::destroy($id);
+        $rs = VidFilm ::destroy($id);
         if (!$rs) {
             return api ::error('删除失败');
         }
@@ -77,13 +78,13 @@ class AppTruth extends Base {
             '编辑' => [
                 'auth' => 'app_truth/edit',
                 'href' => url('app_truth/edit', ['id' => $id]),
-                'btnStyle' => 'primary',
+                'style' => 'primary',
                 'icon' => 'fa fa-paste'
             ],
             '删除' => [
                 'auth' => 'app_truth/del',
                 'href' => "javascript:del(" . $id . ")",
-                'btnStyle' => 'danger',
+                'style' => 'danger',
                 'icon' => 'fa fa-trash-o'
             ]
         ];

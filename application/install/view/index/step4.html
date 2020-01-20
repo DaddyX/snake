@@ -6,7 +6,7 @@
 {/block}
 {block name="content"}
 <div class="box-content step4 text-center">
-    <img src="{$static_dir}install/img/loading.gif" alt="">
+    <img src="/static/install/img/loading.gif" alt="">
     <div id="loading-area">
         <span id="loading-text">0%</span>
         <div id="msg">正在安装...</div>
@@ -35,6 +35,6 @@
     // 替换配置文件
     $conf = replace_config($db_config);
 
-    echo "<script type=\"text/javascript\">location.href='". request()->domain() ."/index/complete.html'</script>";
+    echo "<script type=\"text/javascript\">location.href='". request()->domain() ."/index.php/install/index/complete'</script>";
     {/php}
 {/block}

@@ -3,35 +3,35 @@
 namespace app\admin\controller;
 
 use app\api;
+use app\common\controller\Backend;
 
-class Data extends Base {
+class Data extends Backend {
 
     // 备份首页列表
     public function index() {
         $tables = db() -> query('show tables');
         foreach ($tables as $key => $vo) {
-            $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database')['database']];
+            $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database.database')];
             $tables[$key]['alls'] = db() -> query($sql)['0']['alls'];
 
-            $table = $vo['Tables_in_' . config('database')['database']];
+            $table = $vo['Tables_in_' . config('database.database')];
             $tables[$key]['operate'] = showOperate($this -> makeButton($table));
 
-            if (file_exists(config('back_path') . $vo['Tables_in_' . config('database')['database']] . ".sql")) {
-                $tables[$key]['ctime'] = date('Y-m-d H:i:s', filemtime(config('back_path') . $vo['Tables_in_' .
-                    config('database')['database']] . ".sql"));
+            if (file_exists(config('back_path') . $vo['Tables_in_' . config('database.database')] . ".sql")) {
+                $tables[$key]['ctime'] = date('Y-m-d H:i:s', filemtime(config('back_path') . $vo['Tables_in_' . config('database.database')] . ".sql"));
             } else {
                 $tables[$key]['ctime'] = '无';
             }
         }
         $this -> assign([
             'tables' => $tables,
-            'database' => config('database')['database'],
+            'database' => config('database.database'),
         ]);
         return $this -> fetch();
     }
 
     // 备份数据
-    public function importData() {
+    public function data_backup() {
         set_time_limit(0);
         $table = input('param.table');
 
@@ -63,7 +63,7 @@ class Data extends Base {
     }
 
     // 还原数据
-    public function backData() {
+    public function data_restore() {
         set_time_limit(0);
         $table = input('param.table');
 
@@ -86,15 +86,15 @@ class Data extends Base {
     private function makeButton($table) {
         return [
             '备份' => [
-                'auth' => 'data/importdata',
-                'href' => "javascript:importData('" . $table . "')",
-                'btnStyle' => 'primary',
+                'auth' => 'data/data_backup',
+                'href' => "javascript:data_backup('" . $table . "')",
+                'style' => 'primary',
                 'icon' => 'fa fa-tasks'
             ],
             '还原' => [
-                'auth' => 'data/backdata',
-                'href' => "javascript:backData('" . $table . "')",
-                'btnStyle' => 'info',
+                'auth' => 'data/data_restore',
+                'href' => "javascript:data_restore('" . $table . "')",
+                'style' => 'info',
                 'icon' => 'fa fa-retweet'
             ]
         ];

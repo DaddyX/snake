@@ -2,6 +2,7 @@
 /**
  * 生成操作按钮
  * @param array $operate 操作按钮数组
+ * @return string
  */
 function showOperate($operate = [])
 {
@@ -12,7 +13,10 @@ function showOperate($operate = [])
     $option = '';
     foreach($operate as $key=>$vo){
         if(authCheck($vo['auth'])){
-            $option .= ' <a href="' . $vo['href'] . '" class="btn btn-' . $vo['btnStyle'] . ' btn-sm">' . '<i class="' . $vo['icon'] . '"></i> ' . $key . '</a>';
+            $href = isset($vo['href']) ? $vo['href'] : "";
+            $style = isset($vo['style']) ? $vo['style'] : "";
+            $icon = isset($vo['icon']) ? $vo['icon'] : "";
+            $option .= ' <a href="' . $href . '" class="btn btn-' . $style . ' btn-xs">' . '<i class="' . $icon . '"></i> ' . $key . '</a>';
         }
     }
 
@@ -22,6 +26,7 @@ function showOperate($operate = [])
 /**
  * 将字符解析成数组
  * @param $str
+ * @return array
  */
 function parseParams($str)
 {
@@ -34,6 +39,7 @@ function parseParams($str)
  * 子孙树 用于菜单整理
  * @param $param
  * @param int $pid
+ * @return array
  */
 function subTree($param, $pid = 0)
 {
@@ -87,6 +93,7 @@ function prepareMenu($param)
 /**
  * 解析备份sql文件
  * @param $file
+ * @return array
  */
 function analysisSql($file)
 {
@@ -127,6 +134,7 @@ function analysisSql($file)
 /**
  * 对象转换成数组
  * @param $obj
+ * @return mixed
  */
 function objToArray($obj)
 {
@@ -136,6 +144,7 @@ function objToArray($obj)
 /**
  * 权限检测
  * @param $rule
+ * @return bool
  */
 function authCheck($rule)
 {
@@ -155,6 +164,7 @@ function authCheck($rule)
  * 整理出tree数据 ---  layui tree
  * @param $pInfo
  * @param $spread
+ * @return array
  */
 function getTree($pInfo, $spread = true)
 {

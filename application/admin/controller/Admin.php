@@ -5,8 +5,9 @@ namespace app\admin\controller;
 use app\api;
 use app\admin\model\Admin as AdminModel;
 use app\admin\model\Role as RoleModel;
+use app\common\controller\Backend;
 
-class Admin extends Base {
+class Admin extends Backend {
 
     public function index() {
         if (request() -> isAjax()) {
@@ -16,12 +17,11 @@ class Admin extends Base {
                 $query -> where('username', 'like', '%' . $params['keyword'] . '%');
             }
             $paginate = $query -> paginate($params['limit'], false, ['page' => $params['page']]);
-            $status = config('user_status');
             // 拼装参数
             foreach ($paginate as $key => &$value) {
                 $value['last_login_time'] = date('Y-m-d H:i:s', $value['last_login_time']);
-                $value['status'] = $status[$value['status']];
-                $value['role_name'] = $value -> getRole -> role_name;
+                $value['status_name'] = $value->statusArr[$value['status']];
+                $value['role_name'] = $value -> getRole -> name;
                 unset($value -> role);
 
                 if ($value['id'] == 1) {
@@ -38,11 +38,11 @@ class Admin extends Base {
 
     // 添加
     public function add() {
+        $model = new AdminModel();
         if (request() -> isPost()) {
             $params = input('param.');
-
             $params['password'] = md5($params['password']);
-            $model = new AdminModel();
+
             $rs = $model -> strict(false) -> insert($params);
             if (!$rs) {
                 return api ::error('添加失败');
@@ -51,7 +51,7 @@ class Admin extends Base {
         }
         $this -> assign([
             'role' => RoleModel::select(),
-            'status' => config('user_status')
+            'status' => $model -> statusArr
         ]);
         return $this -> fetch();
     }
@@ -74,7 +74,7 @@ class Admin extends Base {
         }
         $this -> assign([
             'info' => $model -> get($params['id']),
-            'status' => config('user_status'),
+            'status' => $model -> statusArr,
             'role' => RoleModel::select()
         ]);
         return $this -> fetch();
@@ -100,13 +100,13 @@ class Admin extends Base {
             '编辑' => [
                 'auth' => 'admin/edit',
                 'href' => url('admin/edit', ['id' => $id]),
-                'btnStyle' => 'primary',
+                'style' => 'primary',
                 'icon' => 'fa fa-paste'
             ],
             '删除' => [
                 'auth' => 'admin/del',
                 'href' => "javascript:del(" . $id . ")",
-                'btnStyle' => 'danger',
+                'style' => 'danger',
                 'icon' => 'fa fa-trash-o'
             ]
         ];
