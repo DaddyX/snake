@@ -120,3 +120,19 @@ CREATE TABLE `w_admin` (
 -- Records of w_admin
 -- ----------------------------
 INSERT INTO `w_admin` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '41', '127.0.0.1', '1505559479', 'admin', '1', '1');
+
+-- ----------------------------
+-- Table structure for w_admin
+-- ----------------------------
+DROP TABLE IF EXISTS `w_admin_log`;
+CREATE TABLE `w_admin_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `aid` int(11) NOT NULL DEFAULT '0' COMMENT '管理员ID',
+  `controller` varchar(32) NOT NULL DEFAULT '' COMMENT '控制器',
+  `action` varchar(32) NOT NULL DEFAULT '' COMMENT '操作',
+  `request` text COMMENT '参数',
+  `desc` varchar(32) NOT NULL DEFAULT '' COMMENT '描述',
+  `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '操作IP',
+  `datetime` varchar(32) NOT NULL DEFAULT '' COMMENT '操作时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员日志';

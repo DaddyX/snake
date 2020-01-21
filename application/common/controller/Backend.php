@@ -5,11 +5,12 @@ namespace app\common\controller;
 use app\api;
 use think\Controller;
 use think\exception\HttpResponseException;
-use think\facade\Response;
+use think\Response;
 
 class Backend extends Controller {
 
     public $aid = 0;
+    public $params = null;
 
     public function _initialize() {
         if (!session('aid') || !session('username')) {
@@ -21,18 +22,30 @@ class Backend extends Controller {
         }
 
         $this -> aid = session('aid');
+        $this -> params = input('param.', "", "trim");
 
         // 检测权限
-        $control = lcfirst(request() -> controller());
+        $controller = lcfirst(request() -> controller());
         $action = lcfirst(request() -> action());
 
-        if (authCheck($control . '/' . $action) == false && $this -> aid != 1) {
+        if (authCheck($controller . '/' . $action) == false && $this -> aid != 1) {
             if (request() -> isAjax()) {
                 $response = Response ::create(['code' => api::AUTH_ERROR, 'message' => '您没有权限', 'timestamp' => time()], 'json');
                 throw new HttpResponseException($response);
-//                return api ::response(api::AUTH_ERROR, '您没有权限');
             }
             $this -> error('403 您没有权限');
+        }
+        // 记录操作日志
+        if(request() -> isAjax() && $controller != 'index') {
+            $data = [
+                'aid' => $this -> aid,
+                'controller' => $controller,
+                'action' => $action,
+                'ip' => $this -> request -> ip(),
+                'datetime' => date('Y-m-d H:i:s')
+            ];
+            if(!empty($this -> params)) $data['request'] = json_encode($this -> params, true);
+            \think\Db ::name('admin_log') -> insert($data);
         }
 
         $this -> assign([
